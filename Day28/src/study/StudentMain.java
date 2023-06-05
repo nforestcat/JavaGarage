@@ -77,11 +77,10 @@ class StudentMenu{
 		int idx = -1;
 		System.out.println();
 		while(isLoop) {
-			System.out.println("메뉴(1. 학생추가 2.학생검색 3.학생성적수정 4. 학생삭제 5.전체학생  6.학생 전체 초기화 7. 종료 8.과목당 평균 9.학생의 평균)를 입력하세요.");
+			System.out.println("메뉴(1. 학생추가 2.학생검색 3.학생성적수정 4. 학생삭제 5.전체학생조회  6.학생 전체 초기화 7. 종료 8.과목당 평균 9.학생의 평균)를 입력하세요.");
 			menu = sc.nextInt();
 			switch(menu) {
 				case 1:
-					//data.add(new Member("고희동", "017", "성북구"));
 					data.add(infoInput());
 					break;
 				case 2:
@@ -116,6 +115,7 @@ class StudentMenu{
 			System.out.println("-----------------------------");
 		}
 		System.out.println("프로그램 종료");
+		sc.close();
 
 	}
 	Student infoInput() {
@@ -173,8 +173,6 @@ class StudentMenu{
 			dup = new int[1];
 			dup[0] = idx;
 		}
-//		j=0;
-//		idx=-1;
 		return dup;
 	}
 	void printStudent(Student s) {
@@ -196,15 +194,13 @@ class StudentMenu{
 			Student s1 = data.get(idx[0]);
 			System.out.println("기존 정보");
 			printStudent(s1);
-			System.out.print("새 학번");
-			int no = sc.nextInt();
 			System.out.print("새 국어점수");
 			int kor = sc.nextInt();
 			System.out.print("새 영어점수");
 			int eng = sc.nextInt();
 			System.out.print("새 수학점수");
 			int math = sc.nextInt();
-			s1=new Student(s1.getName(), no, kor, eng, math);
+			s1=new Student(s1.getName(), s1.getNo(), kor, eng, math);
 			data.set(idx[0], s1);
 			printStudent(s1);
 		} else {
@@ -218,16 +214,15 @@ class StudentMenu{
 			Student s = data.get(select);
 		System.out.println("기존 정보");
 			printStudent(s);
-			System.out.print("새 학번");
-			int no = sc.nextInt();
+
 			System.out.print("새 국어점수");
 			int kor = sc.nextInt();
 			System.out.print("새 영어점수");
 			int eng = sc.nextInt();
 			System.out.print("새 수학점수");
 			int math = sc.nextInt();
-			s=new Student(s.getName(), no, kor, eng, math);
-			data.set(idx[0], s);
+			s=new Student(s.getName(), s.getNo(), kor, eng, math);
+			data.set(idx[select], s);
 			printStudent(s);
 		}
 	}
