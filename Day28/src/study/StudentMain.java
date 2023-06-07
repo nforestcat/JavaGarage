@@ -1,6 +1,8 @@
 package study;
 
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Scanner;
 
@@ -84,7 +86,7 @@ class StudentMenu{
 					data.add(infoInput());
 					break;
 				case 2:
-					search(data);
+					search2(data);
 					break;
 				case 3:
 					editStudent(data);
@@ -135,44 +137,147 @@ class StudentMenu{
 		int idx = -1;
 		int[] temp = new int[50];
 		int[] dup = null;
-		System.out.println("검색할 이름을 입력해주세요");
-		String name = sc.next();
-		int size = data.size();
-		Student student = new Student();
+		int select;
+		System.out.println("이름 또는 학번으로 검색하실 수 있습니다.");
+		System.out.println("어떤 항목으로 검색하시겠습니까?");
+		System.out.println("1. 이름  2.학번 ");
+		select = sc.nextInt();
+		switch(select) {
+		case 1:
+			System.out.println("검색할 이름을 입력해주세요");
+			String name = sc.next();
+			int size = data.size();
+			Student student = new Student();
+			int j = 0;
+			for (int i = 0; i < size; i++) {
+				student = data.get(i);
+				if(student.getName().equals(name)) {
+					idx = i;
+					temp[j] = idx;
+					j++;
+				}
+			}
+			if(j!=0) {
+				dup = new int[j];
+				for(int i = 0; i < j; i++) {
+					dup[i]= temp[i]; 
+				}
+				
+			}
+			if(j == 1) {
+				Student s = data.get(dup[0]);
+				printStudent(s);
+			}else {
+				
+				for(int i = 0; i < dup.length; i++) {
+					if(i == dup[i] ) {
+						System.out.println("해당 학생은 "+ dup[i]+"번에 있습니다.");
+						Student s = data.get(i);
+						printStudent(s);
+					}
+				}	
+			}
+			if (idx == -1) {
+				System.out.println("학생을 찾을 수 없습니다.");
+				dup = new int[1];
+				dup[0] = idx;
+			}
+			break;
+		case 2:
+			System.out.println("검색할 학번을 입력해주세요");
+			int no = sc.nextInt();
+			int size2 = data.size();
+			Student s = new Student();
+			int k = 0;
+			for (int i = 0; i < size2; i++) {
+				s = data.get(i);
+				if(s.getNo()==(no)) {
+					idx = i;
+					temp[k] = idx;
+					k++;
+				}
+			}
+			if(k!=0) {
+				dup = new int[k];
+				for(int i = 0; i < k; i++) {
+					dup[i]= temp[i]; 
+				}
+				
+			}
+			if(k == 1) {
+				Student st = data.get(dup[0]);
+				printStudent(st);
+			}else {
+				
+				for(int i = 0; i < dup.length; i++) {
+					if(i == dup[i] ) {
+						System.out.println("해당 학생은 "+ dup[i]+"번에 있습니다.");
+						Student st = data.get(i);
+						printStudent(st);
+					}
+				}	
+			}
+			if (idx == -1) {
+				System.out.println("학생을 찾을 수 없습니다.");
+				dup = new int[1];
+				dup[0] = idx;
+			}
+			break;
+		default:
+			System.out.println("잘못 입력하셨습니다.");
+			break;
+		}
+		
+		return dup;
+	}
+	int[] search2(ArrayList<Student> data) {
+		int idx = -1;
+		int[] temp = new int[50];
+		int[] dup = null;
+		System.out.println("이름 또는 학번으로 검색하실 수 있습니다.");
+		String search = sc.next();
+		Student s = new Student();
 		int j = 0;
-		for (int i = 0; i < size; i++) {
-			student = data.get(i);
-			if(student.getName().equals(name)) {
+		try {
+		for (int i = 0; i < data.size(); i++) {
+			s = data.get(i);
+			if(s.getNo()== Integer.parseInt(search)) {
+				idx = i;
+				temp[j] = idx;
+				j++;
+				}
+			}
+			
+		} catch(Exception e) {
+			
+		}
+		for (int i = 0; i < data.size(); i++) {
+			s = data.get(i);
+			if(s.getName().equals(search)) {
 				idx = i;
 				temp[j] = idx;
 				j++;
 			}
 		}
-		if(j!=0) {
-			dup = new int[j];
-			for(int i = 0; i < j; i++) {
-				dup[i]= temp[i]; 
-			}
-			
-		}
-		if(j == 1) {
-			Student s = data.get(dup[0]);
-			printStudent(s);
-		}else {
-			
-			for(int i = 0; i < dup.length; i++) {
-				if(i == dup[i] ) {
-					System.out.println("해당 학생은 "+ dup[i]+"번에 있습니다.");
-					Student s = data.get(i);
-					printStudent(s);
-				}
-			}	
-		}
 		if (idx == -1) {
 			System.out.println("학생을 찾을 수 없습니다.");
 			dup = new int[1];
 			dup[0] = idx;
+		} else {
+			dup = Arrays.copyOf(temp, j);
 		}
+		if(j == 1) {
+			s = data.get(dup[0]);
+			printStudent(s);
+		}else if(j > 1){
+			for(int i = 0; i < dup.length; i++) {
+
+					System.out.println("해당 학생은 "+ dup[i]+"번에 있습니다.");
+					s = data.get(dup[i]);
+					printStudent(s);
+
+			}	
+		}		
 		return dup;
 	}
 	void printStudent(Student s) {
