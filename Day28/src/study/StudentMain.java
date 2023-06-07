@@ -207,7 +207,7 @@ class StudentMenu{
 			System.out.println("학생을 선택해주세요(인덱스 번호)");
 			for(int i = 0; i < idx.length; i++) {
 				Student s2 = data.get(idx[i]);
-				System.out.println(idx[i]);
+				System.out.println("아래는"+idx[i]+"번 학생입니다.");
 				printStudent(s2);
 			}
 			int select = sc.nextInt();
