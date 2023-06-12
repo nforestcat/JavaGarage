@@ -150,7 +150,6 @@ class StudentMenu{
 		System.out.println("======================================");
 		
 		int menu = 0;
-		int idx = -1;
 		System.out.println();
 		while(isLoop) {
 			System.out.println("메뉴(1. 학생추가 2.학생검색 3.학생성적수정 4. 학생삭제 5.전체학생조회  6.학생 전체 초기화 7. 종료 8.과목당 평균 9.학생의 평균)를 입력하세요.");
@@ -172,7 +171,7 @@ class StudentMenu{
 					printAll(data);
 					break;
 				case 6:
-					data.removeAll(data);
+					data.clear();
 					System.out.println("데이터가 초기화되었습니다.");
 					break;
 				case 7:
@@ -205,8 +204,7 @@ class StudentMenu{
 		int eng = sc.nextInt();
 		System.out.print("수학 점수 : ");
 		int math = sc.nextInt();
-		Student s = new Student(name, no, kor, eng, math);
-		return s;
+		return new Student(name, no, kor, eng, math);
 	}
 	/*
 	int[] search(ArrayList<Student> data) {
