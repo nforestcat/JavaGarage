@@ -1,6 +1,15 @@
 package study;
 
-import java.text.ParseException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.nio.file.CopyOption;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -8,13 +17,78 @@ import java.util.Scanner;
 
 public class StudentMain {
 
-		public static void main(String[] args) {
+		public static void main(String[] args) throws Exception, ClassNotFoundException {
 			ArrayList<Student> al = new ArrayList<Student>();
+			String path = "src/study/StudentData.dat";
+			String path2 = "src/study/StudentData_Copy.dat";
+			File file = new File(path);
+			//File file_copy = new File(path2);
+			FileOutputStream fos = null;
+			ObjectOutputStream oos = null;
+			FileInputStream fis = null;
+			ObjectInputStream ois = null;
+//			FileOutputStream fos = new FileOutputStream(path);
+//			ObjectOutputStream oos = new ObjectOutputStream(fos);
+//			FileInputStream fis = new FileInputStream(path);
+//			ObjectInputStream ois = new ObjectInputStream(fis);
+			
+			//Files.copy(file.to)Path(), file_copy.toPath(),StandardCopyOption.REPLACE_EXISTING);
 			StudentMenu sm=new StudentMenu();
+			Student s = new Student();
+			//int i = 0;
+			
+			try {
+				//Files.copy(file.toPath(), file_copy.toPath(),StandardCopyOption.REPLACE_EXISTING);
+				fis = new FileInputStream(file);
+				ois = new ObjectInputStream(fis);
+				while((s=(Student) ois.readObject())!= null) {
+					al.add(s);
+					//System.out.println(s);
+					if(fis.available()==0) {
+						break;
+					}
+				}
+//				while((s=(Student) ois.readObject())!= null) {
+//					System.out.println(s);
+//					if(fis.available()==0) {
+//						break;
+//					}
+//				}
+//				do {
+//					s=(Student) ois.readObject();
+//					al.add(s);
+//				}while(fis.available()!=0);
+			} catch(Exception e){
+				
+			}
+			
 			sm.menuProcess(al);
+			try {
+				fos = new FileOutputStream(path);
+				oos = new ObjectOutputStream(fos);
+				for( int i = 0; i < al.size(); i++) {
+					s = al.get(i);
+					oos.writeObject(s);
+				}
+				oos.close();
+			}catch(Exception ex) {
+				
+			}
+			try {
+				
+			} catch (Exception exc) {
+				// TODO: handle exception
+			}
+			try {
+				ois.close();
+			} catch(Exception x){
+				
+			}
+			
+			//Files.copy(file.toPath(),file_copy.toPath(),StandardCopyOption.REPLACE_EXISTING);
 		}
 }
-class Student{
+class Student implements Serializable{
 	private String name;
 	private int no;
 	private int kor;
@@ -68,12 +142,12 @@ class Student{
 
 class StudentMenu{
 	Scanner sc = new Scanner(System.in);
+	
 	void menuProcess(ArrayList<Student> data) {
 		boolean isLoop = true;
 		System.out.println("======================================");
 		System.out.println("==========학생 관리 프로그램==========");
 		System.out.println("======================================");
-
 		
 		int menu = 0;
 		int idx = -1;
@@ -83,7 +157,7 @@ class StudentMenu{
 			menu = sc.nextInt();
 			switch(menu) {
 				case 1:
-					data.add(infoInput());
+					data.add(infoInput(data));
 					break;
 				case 2:
 					search2(data);
@@ -120,7 +194,7 @@ class StudentMenu{
 		sc.close();
 
 	}
-	Student infoInput() {
+	Student infoInput(ArrayList<Student> data) {
 		System.out.print("이름 : ");
 		String name = sc.next();
 		System.out.print("학번 : ");
@@ -131,8 +205,10 @@ class StudentMenu{
 		int eng = sc.nextInt();
 		System.out.print("수학 점수 : ");
 		int math = sc.nextInt();
-		return new Student(name, no, kor, eng, math);
+		Student s = new Student(name, no, kor, eng, math);
+		return s;
 	}
+	/*
 	int[] search(ArrayList<Student> data) {
 		int idx = -1;
 		int[] temp = new int[50];
@@ -230,6 +306,7 @@ class StudentMenu{
 		
 		return dup;
 	}
+	*/
 	int[] search2(ArrayList<Student> data) {
 		int idx = -1;
 		int[] temp = new int[50];
@@ -291,7 +368,7 @@ class StudentMenu{
 
 	}
 	void editStudent (ArrayList<Student> data ) {
-		int[] idx = search(data);
+		int[] idx = search2(data);
 		
 		if(idx[0] == -1) {
 			//System.out.println("찾을 수 없습니다");
@@ -317,7 +394,7 @@ class StudentMenu{
 			}
 			int select = sc.nextInt();
 			Student s = data.get(select);
-		System.out.println("기존 정보");
+			System.out.println("기존 정보");
 			printStudent(s);
 
 			System.out.print("새 국어점수");
@@ -332,7 +409,7 @@ class StudentMenu{
 		}
 	}
 	void delStudent (ArrayList<Student> data ) {
-		int[] idx = search(data);
+		int[] idx = search2(data);
 		
 		if(idx[0] == -1) {
 			//System.out.println("찾을 수 없습니다");
@@ -399,7 +476,7 @@ class StudentMenu{
 	}
 	
 	void avgStudent(ArrayList<Student> data ){
-		int[] idx = search(data);
+		int[] idx = search2(data);
 		if(idx[0] == -1) {
 			//System.out.println("찾을 수 없습니다");
 		} else if(idx.length == 1 && idx[0] != -1){
