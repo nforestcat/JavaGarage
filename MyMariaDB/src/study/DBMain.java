@@ -191,7 +191,7 @@ class MySqlDao implements Dao{
 	public boolean insert(Member m) {
 		int num = 0;
 		boolean ret = true;
-		sql = "insert into addr values(?, ?, ?);";
+		sql = "insert into addr (name, tel , address) values(?, ?, ?);";
 		
 		try {
 			pstmt = conn.prepareStatement(sql);
